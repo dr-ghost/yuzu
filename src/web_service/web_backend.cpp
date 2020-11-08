@@ -65,6 +65,12 @@ struct Client::Impl {
         if (cli == nullptr) {
             cli = std::make_unique<httplib::Client>(host.c_str());
         }
+
+        if (!cli->is_valid()) {
+            LOG_ERROR(WebService, "Client is invalid, skipping request!");
+            return {};
+        }
+
         cli->set_connection_timeout(TIMEOUT_SECONDS);
         cli->set_read_timeout(TIMEOUT_SECONDS);
         cli->set_write_timeout(TIMEOUT_SECONDS);
